@@ -27,4 +27,4 @@ Configure::write('PlatinMarket.Api.BasePath', '/reform');
 Configure::write('PlatinMarket.Api.OauthPath', '/oauth');
 
 // Call Config
-if (!config('reform_app_config.php')) throw new Exception('reform_app_config.php not found');
+if (!config('reform_app_config')) throw new Exception('reform_app_config.php not found');
