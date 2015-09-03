@@ -1,0 +1,25 @@
+{
+    "name": "platinmarket/platinmarket-cake-plugin",
+    "type": "cakephp-plugin",
+    "description": "PlatinMarket CakePHP plugin is a api wrapper for platinmarket e-commerce platform with use CakePHP",
+    "keywords": [
+        "cakephp",
+        "platinmarket"
+    ],
+    "homepage": "http://www.platinmarket.com",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Burak Doğan",
+            "email": "burak@platinmarket.com"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/PlatinMarket/platinmarket-cake-plugin/issues",
+        "source": "https://github.com/PlatinMarket/platinmarket-cake-plugin"
+    },
+    "require": {
+        "php": ">=5.3.0",
+        "composer/installers": "*"
+    }
+}
