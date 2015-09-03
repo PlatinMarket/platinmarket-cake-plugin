@@ -45,7 +45,7 @@ class ReformApiComponent extends Component
     if (empty($this->session_id)) throw new ReformApiException("Session id required");
 
     // Check If Request Session Start
-    if ($this->Controller->request->url == "session_start")
+    if (strpos($this->Controller->request->url, "session_start") !== false)
     {
       $this->Session->write('PlatinMarket.Customer.' . $this->session_id, null);
       $this->Controller->redirect($this->Controller->request->data['redirect_uri']);
