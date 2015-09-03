@@ -1,0 +1,10 @@
+<?php
+
+// Client Id
+Configure::write('PlatinMarket.ClientID', '');
+
+// Client Secret
+Configure::write('PlatinMarket.ClientSecret', '');
+
+// Application UUID
+Configure::write('PlatinMarket.ApplicationUUID', '');
