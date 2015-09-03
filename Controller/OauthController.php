@@ -27,7 +27,7 @@ class OauthController extends PlatinmarketAppController
         throw new UnauthorizedException("Missing callback post parameters");
 
     $this->ReformApi->saveAuthCode($this->request->data['auth_code']);
-    $this->redirect(array('plugin' => null, 'controller' => 'config', 'action' => 'index', 'session_id' => $this->ReformApi->getSessionId()));
+    $this->redirect(array('plugin' => null, 'session_id' => $this->ReformApi->getSessionId()));
   }
 
 }

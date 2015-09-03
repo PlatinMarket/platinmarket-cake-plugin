@@ -158,7 +158,7 @@ class ReformApiComponent extends Component
   {
     // Check Page is error
     if ($this->Controller->name == 'CakeError') return;
-    pr($this->customer_data);
+    $this->Controller->set('customer_uuid', $this->customer_uuid); // Set Customer UUID
     $this->Controller->set('customer_data', $this->customer_data); // Set Customer Data
     $this->Controller->set('session_id', $this->session_id); // Set Session Id
   }
