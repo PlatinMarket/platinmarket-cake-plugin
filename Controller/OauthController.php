@@ -7,8 +7,6 @@ App::uses('HttpSocket', 'Network/Http');
 class OauthController extends PlatinmarketAppController
 {
 
-  public $components = array('Platinmarket.ReformApi', 'Session');
-
   public $uses = null;
 
   // Authorize Callback Method
@@ -27,7 +25,7 @@ class OauthController extends PlatinmarketAppController
         throw new UnauthorizedException("Missing callback post parameters");
 
     $this->ReformApi->saveAuthCode($this->request->data['auth_code']);
-    $this->redirect(array('plugin' => null, 'session_id' => $this->ReformApi->getSessionId()));
+    $this->ReformApi->redirectMainPage();
   }
 
 }

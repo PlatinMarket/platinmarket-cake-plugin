@@ -20,6 +20,17 @@ class ReformApiComponent extends Component
     return $this->session_id;
   }
 
+  // App Main Page
+  public $main_page = null;
+  public function redirectMainPage()
+  {
+    if (is_null($this->main_page)) return $this->Controller->redirect('/' . $this->session_id);
+    if (is_string($this->main_page)) return $this->Controller->redirect($this->main_page);
+    if (!isset($this->main_page['plugin'])) $this->main_page['plugin'] = null;
+    $this->main_page['session_id'] = $this->session_id;
+    $this->Controller->redirect($this->main_page);
+  }
+
   // Holds Current Controller
   private $Controller = null;
 
