@@ -1,5 +1,8 @@
 <?php
 
+//Parse Json extensions
+Router::parseExtensions('json');
+
 //Main Page
 Router::connect('/:session_id', array('controller' => 'main', 'action' => 'index'), array('session_id' => '[a-z|A-Z|0-9]+'));
 Router::connect('/:session_id/main/*', array('controller' => 'main', 'action' => 'index'), array('session_id' => '[a-z|A-Z|0-9]+'));
@@ -12,7 +15,6 @@ Router::connect('/oauth/callback', array('plugin' => 'platinmarket', 'controller
 
 // Plugin SessionId
 Router::connect('/:session_id/:plugin/:controller/:action', array(), array('session_id' => '[a-z|A-Z|0-9]+'));
-Router::connect('/:session_id/:plugin/:controller', array('action' => 'index'), array('session_id' => '[a-z|A-Z|0-9]+'));
 
 // SessionId
 Router::connect('/:session_id/:controller/:action', array(), array('session_id' => '[a-z|A-Z|0-9]+'));

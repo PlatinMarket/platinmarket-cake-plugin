@@ -10,8 +10,21 @@ class ReformApiComponent extends Component
   // Load Core Components
   public $components = array('Session');
 
-  // Hold Customer Data
+  // Hold Customer UUID
   private $customer_uuid = null;
+  public function getCustomerUUID()
+  {
+    return $this->customer_uuid;
+  }
+
+  // Get AccessToken
+  public function getAccessToken()
+  {
+    return $this->ReformApi->getAccessToken($this->customer_uuid);
+  }
+
+  // Hold Customer Data
+  public $customer_data = null;
 
   // Hold Session Id
   private $session_id = null;
@@ -29,6 +42,22 @@ class ReformApiComponent extends Component
     if (!isset($this->main_page['plugin'])) $this->main_page['plugin'] = null;
     $this->main_page['session_id'] = $this->session_id;
     $this->Controller->redirect($this->main_page);
+  }
+
+  // Reform Api Redirect
+  public function redirect($url)
+  {
+    if (is_array($url)) $url['session_id'] = $this->session_id;
+    if (is_string($url)) $url = "/" . $this->session_id . $url;
+    $this->Controller->redirect($url);
+  }
+
+  // Reform Api Router
+  public function url($url, $full = false)
+  {
+    if (is_array($url)) $url['session_id'] = $this->session_id;
+    if (is_string($url)) $url = "/" . $this->session_id . $url;
+    return Router::url($url, $full);
   }
 
   // Holds Current Controller
@@ -78,11 +107,33 @@ class ReformApiComponent extends Component
     if (!empty($this->customer_uuid)) $this->Session->write('PlatinMarket.Customer.' . $this->session_id, $this->customer_uuid);
     if (empty($this->customer_uuid)) throw new ReformApiException("Customer uuid not found");
 
+    // Write globally customer uuid
+    Configure::write('customer_uuid', $this->customer_uuid);
+
     // Get Customer Data
     if (($this->customer_data = $this->ReformApi->getCustomer($this->customer_uuid)) === false)
     {
       // Get Authorize
       if (!$this->isPage(array('action' => 'authorize')) && !$this->isPage(array('action' => 'callback'))) $this->authorize();
+    }
+
+    // Check Request is authorize answer
+    if (strpos($this->Controller->request->url, "oauth/callback") !== false)
+    {
+      // Check Request
+      if (
+          !isset($this->Controller->request->data['customer_uuid']) ||
+          !isset($this->Controller->request->data['platform_uuid']) ||
+          !isset($this->Controller->request->data['auth_code']) ||
+          !isset($this->Controller->request->data['lifetime']) ||
+          !isset($this->Controller->request->data['hash']) ||
+          !isset($this->Controller->request->data['hash-map']) ||
+          !isset($this->Controller->request->data['time'])
+        )
+          throw new UnauthorizedException("Missing callback post parameters");
+
+      $this->saveAuthCode($this->Controller->request->data['auth_code']);
+      $this->redirectMainPage();
     }
   }
 
@@ -119,49 +170,6 @@ class ReformApiComponent extends Component
 
     $this->Controller->set(compact('data', 'method', 'action'));
     $this->Controller->view = 'Platinmarket.Oauth/authorize';
-  }
-
-  // Init Customer Data
-  private function __init_customer_data()
-  {
-    // Return if already set or at during install
-    if (!empty($this->customer_data)) return;
-
-    // Check Params Page -> Page
-    if (!empty($this->session_id) && !empty($this->Controller->Session->read('session_map.' . $this->session_id)))
-    {
-      $this->customer_data = ClassRegistry::init('Customer')->findByUuid($this->Controller->Session->read('session_map.' . $this->session_id));
-      return;
-    }
-    elseif (!empty($this->params->customer_id)) // Check customer_id already set probably 404
-    {
-      throw new NotFoundException("Customer id not found");
-    }
-
-    // Check Request
-    if (
-        !isset($this->Controller->request->data['command']) ||
-        !isset($this->Controller->request->data['customer_uuid']) ||
-        !isset($this->Controller->request->data['platform_uuid']) ||
-        !isset($this->Controller->request->data['success_url']) ||
-        !isset($this->Controller->request->data['fail_url']) ||
-        !isset($this->Controller->request->data['hash']) ||
-        !isset($this->Controller->request->data['hash-map']) ||
-        !isset($this->Controller->request->data['time'])
-      )
-        throw new UnauthorizedException("Missing post parameters");
-    else
-      extract($this->Controller->request->data);
-
-    // Write Session -> CustomerUUID Map
-    $this->Controller->Session->write('session_map.' . $this->session_id, $customer_uuid);
-
-    // Check Hash
-    if ($hash != $this->__hash(Configure::read("PlatinMarket.ClientID"), Configure::read("PlatinMarket.ClientSecret"), array($command, $customer_uuid, $platform_uuid, $success_url, $fail_url)))
-      throw new BadRequestException("Invalid Hash");
-
-    // Get Data
-    $this->customer_data = ClassRegistry::init('Customer')->findByUuid($customer_uuid);
   }
 
   // Before Render Page

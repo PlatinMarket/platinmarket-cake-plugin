@@ -69,7 +69,7 @@ class ReformApi
   }
 
   // Get AccessToken
-  private function getAccessToken($customer_uuid)
+  public function getAccessToken($customer_uuid)
   {
     // Get AccessToken from db
     if (!empty($accessToken = $this->db->read('AccessToken.' . $customer_uuid))) return Hash::get($accessToken, 'token');
