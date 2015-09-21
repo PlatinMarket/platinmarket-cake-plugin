@@ -15,7 +15,7 @@
     <?php echo $this->fetch('content'); ?>
     <script type="text/javascript">
       var forms = document.getElementsByTagName("form");
-      if (forms.length > 0 && ((debug === 0) && confirm("Submit form?", "Debug Mode Detected"))) forms[0].submit();
+      if (forms.length > 0 && ((debug === 0) || confirm("Submit form?", "Debug Mode Detected"))) forms[0].submit();
     </script>
 </body>
 </html>
