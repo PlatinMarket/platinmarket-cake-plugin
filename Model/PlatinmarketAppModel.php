@@ -20,6 +20,10 @@ class PlatinmarketAppModel extends AppModel
 
   // Holds Customer Uuid
   public $customer_uuid = null;
+  public function setCustomer($customer)
+  {
+    $this->customer_uuid = Hash::get($customer, 'Customer.uuid');
+  }
 
   // Constructor
   public function __construct($id = false, $table = null, $ds = null) {
