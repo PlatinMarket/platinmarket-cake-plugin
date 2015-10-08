@@ -102,7 +102,7 @@ class ReformApi
     return false;
   }
 
-  public function getCustomer($customer_uuid)
+  public function getCustomer($customer_uuid, $retryFlag = false)
   {
     if (!($access_token = $this->getAccessToken($customer_uuid))) return false;
 
@@ -125,14 +125,27 @@ class ReformApi
     }
     catch (ReformApiException $e)
     {
+      if ($retryFlag == true)
+      {
+        $e->setRetryFlag(true);
+        throw $e;
+      }
       $this->db->remove('AccessToken.' . $customer_uuid);
       if (!($access_token = $this->getAccessToken($customer_uuid))) return false;
-      return $this->getCustomer($customer_uuid);
+      return $this->getCustomer($customer_uuid, true);
     }
     catch (Exception $e)
     {
       throw $e;
     }
+  }
+
+  // Refresh Token from customer uuid
+  public function refreshToken($customer_uuid)
+  {
+    $this->db->remove('AccessToken.' . $customer_uuid);
+    if (!($access_token = $this->getAccessToken($customer_uuid))) return false;
+    return $access_token;
   }
 
   // Get Access Token From AuthCode
