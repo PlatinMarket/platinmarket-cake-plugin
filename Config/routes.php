@@ -5,7 +5,6 @@ Router::parseExtensions('json');
 
 //Main Page
 Router::connect('/:session_id', array('controller' => 'main', 'action' => 'index'), array('session_id' => '[a-z|A-Z|0-9]+'));
-Router::connect('/:session_id/main/*', array('controller' => 'main', 'action' => 'index'), array('session_id' => '[a-z|A-Z|0-9]+'));
 
 // Session Start
 Router::connect('/session_start', array('plugin' => 'platinmarket', 'controller' => 'main', 'action' => 'index'));
