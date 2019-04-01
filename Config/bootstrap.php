@@ -18,7 +18,7 @@ Configure::write('PlatinMarket.PlatformUUID', 'aa3f59ac-380b-11e4-8f24-000c29ebd
 Configure::write('PlatinMarket.Scope', '*:*');
 
 // ReformApi Base
-Configure::write('PlatinMarket.Api.Base', 'http://developer.platinmarket.com');
+Configure::write('PlatinMarket.Api.Base', 'https://developer.platinmarket.com');
 
 // ReformApi Base Path
 Configure::write('PlatinMarket.Api.BasePath', '/reform');
