@@ -71,7 +71,7 @@ class PlatinmarketAppModel extends AppModel
     if (isset($response_arr['name']) && isset($response_arr['message']) && isset($response_arr['url']))
       $response_arr = array('header' => $response->headers, 'data' => $response->code . ' ' . $response_arr['name'], 'error' => array('code' => $response->code, 'message' => $response_arr['message'], 'scope' => 'LOCAL'));
 
-    if (!$response->isOk()) throw new ReformApiException(array('url' => $url, 'request' => $data, 'response' => $response_arr), $response->code);
+    if ((!$response_arr || !is_array($response_arr) || empty($response_arr)) && !$response->isOk()) throw new ReformApiException(array('url' => $url, 'request' => $data, 'response' => $response_arr), $response->code);
 
     if (!is_null($response_arr['error']['code'])) throw new ReformApiException(array('url' => $url, 'request' => $data, 'response' => $response_arr), $response_arr['error']['code']);
 
