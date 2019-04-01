@@ -24,7 +24,7 @@ class ReformApi
     $dbFile = TMP . DS . 'reform_db' . DS . 'db.dat';
     if (Configure::read('PlatinMarket.DbFile')) $dbFile = Configure::read('PlatinMarket.DbFile');
     $this->db = new ReformApiData($dbFile);
-    $this->http = new HttpSocket();
+    $this->http = new HttpSocket(array('ssl_verify_peer' => false));
   }
 
   // Sign Data
@@ -213,7 +213,7 @@ class ReformApi
   public function getResponse($method = 'GET', $uri)
   {
     // Make Request
-    $HttpSocket = new HttpSocket();
+    $HttpSocket = new HttpSocket(array('ssl_verify_peer' => false));
     $response = $HttpSocket->get($action, $data);
 
     // Check Response
