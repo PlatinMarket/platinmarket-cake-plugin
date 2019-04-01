@@ -24,7 +24,7 @@ class PlatinmarketAppModel extends AppModel
   // Constructor
   public function __construct($id = false, $table = null, $ds = null) {
     parent::__construct($id, $table, $ds);
-    $this->http = new HttpSocket();
+    $this->http = new HttpSocket(array('ssl_verify_peer' => false));
     $this->ReformApi = new ReformApi();
   }
 
